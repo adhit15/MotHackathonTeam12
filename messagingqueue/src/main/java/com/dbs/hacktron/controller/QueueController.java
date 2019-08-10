@@ -17,6 +17,6 @@ public class QueueController {
 	
 	@GetMapping(value = "/getQueaus")
 	public List<QueueModel> getAllQueues() {
-		return queueService.getAllQueues();
+		return queueService.findAll();
 	}
 }
