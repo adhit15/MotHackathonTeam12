@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dbs.hacktron.model.Queue;
-import com.dbs.hacktron.service.ProcessQueue;
 import com.dbs.hacktron.service.QueueServiceImpl;
+import com.dbs.hacktron.service.impl.ProcessQueueImpl;
 
 @RestController
 public class QueueController {
@@ -21,7 +21,7 @@ public class QueueController {
 	private QueueServiceImpl queueService;
 
 	@Autowired
-	private ProcessQueue processQueue;
+	private ProcessQueueImpl processQueue;
 
 	@GetMapping(value = "/queue/all")
 	public List<Queue> getAllQueues() {
@@ -29,7 +29,7 @@ public class QueueController {
 	}
 
 	@GetMapping(value = "/queue/{id}")
-	public Queue getQueueById(@PathVariable int id) {
+	public Queue getQueueById(@PathVariable Long id) {
 		return queueService.getQueueById(id);
 	}
 
@@ -45,7 +45,7 @@ public class QueueController {
 	}
 
 	@GetMapping(value = "/queue/delete/{id}")
-	public void deleteQueueById(@PathVariable int queueId) {
+	public void deleteQueueById(@PathVariable Long queueId) {
 		queueService.deleteQueueById(queueId);
 	}
 
@@ -55,12 +55,17 @@ public class QueueController {
 	}
 
 	@GetMapping(value = "/consume/{id}")
-	public void consume(@PathVariable long id) {
-		processQueue.consume(id);
+	public String consume(@PathVariable Long id) {
+		return processQueue.consume(id);
+	}
+
+	@GetMapping(value = "/remove/{id}")
+	public String remove(@PathVariable Long id) {
+		return processQueue.remove(id);
 	}
 
 	@GetMapping(value = "/produce/{queueId}/{message}/{maxLimit}")
-	public void produce(long queueId, String message, long maxLimit) {
-		processQueue.produce(queueId, message, maxLimit);
+	public String produce(@PathVariable Long queueId, @PathVariable String message, @PathVariable Long maxLimit) {
+		return processQueue.add(queueId, message, maxLimit);
 	}
 }

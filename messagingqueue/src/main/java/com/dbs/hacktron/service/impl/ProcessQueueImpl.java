@@ -5,66 +5,65 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.stereotype.Component;
+
 import com.dbs.hacktron.service.ProcessQueue;
 
+@Component
 public class ProcessQueueImpl implements ProcessQueue {
-	
-	private Map<Long, Queue<String>> messagesMap = new ConcurrentHashMap<Long, Queue<String>>();
-	
-	public void initial(){
-		this.messagesMap.put(1L, new ArrayBlockingQueue(3));
+
+	private static final Map<Long, Queue<String>> messagesMap = new ConcurrentHashMap<Long, Queue<String>>();
+
+	static {
+		messagesMap.put(1L, new ArrayBlockingQueue(30));
+		messagesMap.put(2L, new ArrayBlockingQueue(30));
+		messagesMap.put(3L, new ArrayBlockingQueue(30));
+		messagesMap.put(4L, new ArrayBlockingQueue(30));
+		messagesMap.put(5L, new ArrayBlockingQueue(30));
 	}
 
 	@Override
-	public synchronized String consume(long queueId) {
+	public String consume(long queueId) {// reading
 		String message = "";
 		Queue<String> messages = messagesMap.get(queueId);
-		
-		while(messages.size()==0){
-			try {
-				//TODO:print queue is empty
-				wait();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+		if (messages.size() == 0) {
+			System.out.println("Queue is empty");
+			return "";
 		}
 
-		message=messages.remove();
+		message = messages.peek();// It retriuves but does not delete
 		messagesMap.put(queueId, messages);
-		notifyAll();
-		System.out.println(Thread.currentThread().getName() + " consumed " + message);
 		return message;
 	}
 
 	@Override
-	public synchronized void produce(long queueId, String message, long maxLimit) {
-	
+	public String remove(long queueId) {// reading
+		String message = "";
 		Queue<String> messages = messagesMap.get(queueId);
-		
-		while(messages.size()==maxLimit){
-			try {
-				//TODO:print queue is full
-				wait();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+		if (messages.size() == 0) {
+			System.out.println("Queue is empty");
+			return "";
 		}
 
-		messages.add(message);
+		message = messages.poll();
 		messagesMap.put(queueId, messages);
-		notifyAll();
-		
-		System.out.println(Thread.currentThread().getName() + " produced " + message); 
+		return message;
 	}
-	
-
 
 	@Override
-	public String consumeAll(long queueId) {
-		// TODO Auto-generated method stub
-		return null;
+	public String add(long queueId, String message, long maxLimit) {
+
+		Queue<String> messages = messagesMap.get(queueId);
+
+		if (messages.size() == maxLimit) {
+			System.out.println("Queue is full");
+			return "Queue is full";
+		}
+		messages.add(message);
+		messagesMap.put(queueId, messages);
+		return messages+" added to queue.";
 	}
 
 }
