@@ -1,0 +1,7 @@
+Create table Queue(qid integer, qname varchar(500), maximumsize varchar(500),lastmodifiedby date,createdby date,PRIMARY KEY (qid) );
+
+create table queue_messages
+(qid number(10),
+messageId number(10),
+message varchar2(1000)
+)
