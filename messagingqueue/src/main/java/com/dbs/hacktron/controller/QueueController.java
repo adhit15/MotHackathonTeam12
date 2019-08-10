@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dbs.hacktron.model.Queue;
+import com.dbs.hacktron.model.QueueModel;
 import com.dbs.hacktron.service.QueueService;
 
 @RestController
@@ -16,7 +16,7 @@ public class QueueController {
 	private QueueService queueService;
 	
 	@GetMapping(value = "/getQueaus")
-	public List<Queue> getAllQueues() {
+	public List<QueueModel> getAllQueues() {
 		return queueService.getAllQueues();
 	}
 }
