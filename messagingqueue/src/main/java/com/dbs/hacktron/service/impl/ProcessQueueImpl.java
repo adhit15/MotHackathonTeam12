@@ -16,47 +16,30 @@ public class ProcessQueueImpl implements ProcessQueue {
 	}
 
 	@Override
-	public synchronized String consume(long queueId) {
+	public String consume(long queueId) throws Exception{
 		String message = "";
 		Queue<String> messages = messagesMap.get(queueId);
 		
-		while(messages.size()==0){
-			try {
-				//TODO:print queue is empty
-				wait();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if(messages.size()==0){
+			throw new Exception("Queue is empty");
 		}
 
 		message=messages.remove();
 		messagesMap.put(queueId, messages);
-		notifyAll();
-		System.out.println(Thread.currentThread().getName() + " consumed " + message);
 		return message;
 	}
 
 	@Override
-	public synchronized void produce(long queueId, String message, long maxLimit) {
+	public void produce(long queueId, String message, long maxLimit) throws Exception {
 	
 		Queue<String> messages = messagesMap.get(queueId);
 		
-		while(messages.size()==maxLimit){
-			try {
-				//TODO:print queue is full
-				wait();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if(messages.size()==maxLimit){
+			throw new Exception("Queue is full");
 		}
 
 		messages.add(message);
 		messagesMap.put(queueId, messages);
-		notifyAll();
-		
-		System.out.println(Thread.currentThread().getName() + " produced " + message); 
 	}
 	
 
