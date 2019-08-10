@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dbs.hacktron.model.Queue;
+import com.dbs.hacktron.service.ProcessQueue;
 import com.dbs.hacktron.service.QueueServiceImpl;
 
 @RestController
@@ -18,6 +19,9 @@ public class QueueController {
 
 	@Autowired
 	private QueueServiceImpl queueService;
+
+	@Autowired
+	private ProcessQueue processQueue;
 
 	@GetMapping(value = "/queue/all")
 	public List<Queue> getAllQueues() {
@@ -31,7 +35,7 @@ public class QueueController {
 
 	@PostMapping(value = "/queue/add")
 	public Queue addNewQueue(@RequestBody Queue queue) {
-		System.out.println("In que post::"+queue.getQid());
+		System.out.println("In que post::" + queue.getQid());
 		return queueService.addNewQueue(queue);
 	}
 
@@ -49,5 +53,14 @@ public class QueueController {
 	public void deleteAllQueues() {
 		queueService.deleteAllQueues();
 	}
-}
 
+	@GetMapping(value = "/consume/{id}")
+	public void consume(@PathVariable long id) {
+		processQueue.consume(id);
+	}
+
+	@GetMapping(value = "/produce/{queueId}/{message}/{maxLimit}")
+	public void produce(long queueId, String message, long maxLimit) {
+		processQueue.produce(queueId, message, maxLimit);
+	}
+}
