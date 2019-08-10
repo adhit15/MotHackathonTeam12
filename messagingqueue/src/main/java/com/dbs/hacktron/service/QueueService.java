@@ -1,42 +1,21 @@
 package com.dbs.hacktron.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.dbs.hacktron.model.Queue;
 
-import com.dbs.hacktron.model.QueueModel;
-import com.dbs.hacktron.repository.QueueRepository;
+public interface QueueService {
 
-@Service
-public class QueueService {
+	List<Queue> getAllQueues();
 
-	@Autowired
-	private QueueRepository queueRepository;
+	Queue getQueueById(long queueId);
 
-	public void addQueue(QueueModel queue) {
-		queueRepository.save(queue);
-	}
+	Queue addNewQueue(Queue queue);
 
-	public void getQueue(Long id) {
-		queueRepository.findById(id);
-	}
+	Queue updateQueue(Queue queue);
 
-	public List<QueueModel> findAll() {
-		List<QueueModel> queues = (List<QueueModel>) queueRepository.findAll();
-		return queues;
-	}
+	void deleteQueueById(long queueId);
 
-	public Optional<QueueModel> findById(long id) {
-		// TODO Auto-generated method stub
-		return queueRepository.findById(id);
-	}
-
-	public void delete(QueueModel queue) {
-		// TODO Auto-generated method stub
-		queueRepository.delete(queue);
-
-	}
+	void deleteAllQueues();
 
 }
