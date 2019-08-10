@@ -8,6 +8,7 @@ public class QueueModel {
 	String queueName;
 	long maxLimit;
 	Queue<String> message;
+	String messageStatus="N";
 
 	public QueueModel(long queueId, String queueName, long maxLimit, Queue<String> message) {
 		super();
@@ -35,6 +36,14 @@ public class QueueModel {
 
 	public long getMaxLimit() {
 		return maxLimit;
+	}
+
+	public String getMessageStatus() {
+		return messageStatus;
+	}
+
+	public void setMessageStatus(String messageStatus) {
+		this.messageStatus = messageStatus;
 	}
 
 	public void setMaxLimit(long maxLimit) {
