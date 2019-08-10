@@ -63,7 +63,12 @@ public class ProcessQueueImpl implements ProcessQueue {
 		}
 		messages.add(message);
 		messagesMap.put(queueId, messages);
-		return messages+" added to queue.";
+		return messages + " added to queue.";
+	}
+
+	@Override
+	public ArrayBlockingQueue<String> browse(long queueId) {
+		return (ArrayBlockingQueue) messagesMap.get(queueId);
 	}
 
 }

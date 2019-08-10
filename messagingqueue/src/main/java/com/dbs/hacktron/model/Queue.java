@@ -13,12 +13,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.stereotype.Component;
 
 @Component
-
-//Spring jpa jars.
 @Entity
-@Table(name= "Queue")
-
-//To increase speed and save sql statement execution time.
+@Table(name = "Queue")
 @DynamicInsert
 @DynamicUpdate
 public class Queue {
@@ -30,38 +26,45 @@ public class Queue {
 	private String maximumsize;
 	private Date lastModifiedDate;
 	private Date createdDate;
-	
-	
+
 	public int getQid() {
 		return qid;
 	}
+
 	public void setQid(int qid) {
 		this.qid = qid;
 	}
+
 	public String getQname() {
 		return qname;
 	}
+
 	public void setQname(String qname) {
 		this.qname = qname;
 	}
+
 	public String getMaximumsize() {
 		return maximumsize;
 	}
+
 	public void setMaximumsize(String maximumsize) {
 		this.maximumsize = maximumsize;
 	}
+
 	public Date getLastModifiedDate() {
 		return lastModifiedDate;
 	}
+
 	public void setLastModifiedDate(Date lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
+
 	public Date getCreatedDate() {
 		return createdDate;
 	}
+
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
-	
-	
+
 }

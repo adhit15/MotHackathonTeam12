@@ -1,8 +1,10 @@
 package com.dbs.hacktron.controller;
 
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,9 +16,13 @@ import com.dbs.hacktron.model.Queue;
 import com.dbs.hacktron.service.QueueServiceImpl;
 import com.dbs.hacktron.service.impl.ProcessQueueImpl;
 
+/**
+ * Controller to process all the request
+ * @author rbathini
+ *
+ */
 @RestController
-public class QueueController {
-
+public class QueueController { 
 	@Autowired
 	private QueueServiceImpl queueService;
 
@@ -34,6 +40,7 @@ public class QueueController {
 	}
 
 	@PostMapping(value = "/queue/add")
+	@CrossOrigin
 	public Queue addNewQueue(@RequestBody Queue queue) {
 		System.out.println("In que post::" + queue.getQid());
 		return queueService.addNewQueue(queue);
@@ -68,4 +75,10 @@ public class QueueController {
 	public String produce(@PathVariable Long queueId, @PathVariable String message, @PathVariable Long maxLimit) {
 		return processQueue.add(queueId, message, maxLimit);
 	}
+
+	@GetMapping(value = "/browse/{queueId}")
+	public ArrayBlockingQueue<String> produce(@PathVariable Long queueId) {
+		return processQueue.browse(queueId);
+	}
+
 }
